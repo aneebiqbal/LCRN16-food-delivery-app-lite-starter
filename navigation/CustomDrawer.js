@@ -12,10 +12,12 @@ import {
     dummyData
 } from '../constants'
 import Animated  from 'react-native-reanimated'
+import { connect, Connect } from 'react-redux'
+import { setSelectedTab } from '../stores/tab/tabAction'
 
 const Drawer = createDrawerNavigator();
 
-const CustomDrawerItem = ({label,icon}) =>{
+const CustomDrawerItem = ({label,icon,isFocused, onPress}) =>{
     return(
         <TouchableOpacity
             style={{
@@ -24,9 +26,10 @@ const CustomDrawerItem = ({label,icon}) =>{
                 marginBottom:SIZES.base,
                 alignItems:'center',
                 paddingLeft:SIZES.radius,
-                borderRadius:SIZES.base
-                //backgroundColor
+                borderRadius:SIZES.base,
+                backgroundColor: isFocused ? COLORS.transparentBlack1 : null
             }}
+            onPress={onPress}
         >
             <Image 
                 source={icon}
@@ -50,7 +53,7 @@ const CustomDrawerItem = ({label,icon}) =>{
     )
 }
 
-const CustomDrawerContent = ({navigation}) =>{
+const CustomDrawerContent = ({navigation, selectedTab, setSelectedTab}) =>{
     return(
         <DrawerContentScrollView
             scrollEnabled={true}
@@ -124,19 +127,40 @@ const CustomDrawerContent = ({navigation}) =>{
                     <CustomDrawerItem 
                         label= {constants.screens.home}
                         icon={icons.home}
+                        isFocused={selectedTab == constants.screens.home}
+                        onPress={() =>{
+                            setSelectedTab(constants.screens.home)
+                            navigation.navigate('MianLayout')
+                        }}
                     />
                     <CustomDrawerItem 
                         label= {constants.screens.my_walltet}
                         icon={icons.wallet}
+                        isFocused={selectedTab == constants.screens.my_walltet}
+                        onPress={() =>{
+                            setSelectedTab(constants.screens.my_walltet)
+                            navigation.navigate('MianLayout')
+                        }}
                     />
                     <CustomDrawerItem 
                         label= {constants.screens.notification}
                         icon={icons.notification}
+                        isFocused={selectedTab == constants.screens.notification}
+                        onPress={() =>{
+                            setSelectedTab(constants.screens.notification)
+                            navigation.navigate('MianLayout')
+                        }}
                     />
                     <CustomDrawerItem 
                         label= {constants.screens.favourite}
                         icon={icons.favourite}
+                        isFocused={selectedTab == constants.screens.favourite}
+                        onPress={() =>{
+                            setSelectedTab(constants.screens.favourite)
+                            navigation.navigate('MianLayout')
+                        }}
                     />
+
                     {/* line Divider */}
 
                     <View 
@@ -150,22 +174,47 @@ const CustomDrawerContent = ({navigation}) =>{
                     <CustomDrawerItem 
                         label= 'Track Your Order'
                         icon={icons.location}
+                        isFocused={selectedTab == 'Track Your Order'}
+                        onPress={() =>{
+                            setSelectedTab('Track Your Order')
+                            navigation.navigate('MianLayout')
+                        }}
                     />
                     <CustomDrawerItem 
                         label= 'Coupons'
                         icon={icons.coupon}
+                        isFocused={selectedTab == 'Coupons'}
+                        onPress={() =>{
+                            setSelectedTab('Coupons')
+                            navigation.navigate('MianLayout')
+                        }}
                     />
                     <CustomDrawerItem 
                         label= 'Settings'
                         icon={icons.setting}
+                        isFocused={selectedTab == 'Settings'}
+                        onPress={() =>{
+                            setSelectedTab('Settings')
+                            navigation.navigate('MianLayout')
+                        }}
                     />
                     <CustomDrawerItem 
                         label= 'Invite a Friend'
                         icon={icons.profile}
+                        isFocused={selectedTab == 'Invite a Friend'}
+                        onPress={() =>{
+                            setSelectedTab('Invite a Friend')
+                            navigation.navigate('MianLayout')
+                        }}
                     />
                     <CustomDrawerItem 
                         label= 'Help Center'
                         icon={icons.help}
+                        isFocused={selectedTab == 'Help Center'}
+                        onPress={() =>{
+                            setSelectedTab('Help Center')
+                            navigation.navigate('MianLayout')
+                        }}
                     />
                 </View>
                 <View style={{
@@ -174,14 +223,18 @@ const CustomDrawerContent = ({navigation}) =>{
                     <CustomDrawerItem 
                         label= 'Log Out'
                         icon={icons.logout}
+                        isFocused={selectedTab == 'Log Out'}
+                        onPress={() =>{
+                            setSelectedTab('Help Center')
+                            navigation.navigate('MianLayout')
+                        }}
                     />
                 </View>
             </View>
         </DrawerContentScrollView>
     )
 }
-
-const CustomDrawer = () => {
+const CustomDrawer = ({ selectedTab, setSelectedTab}) => {
 
     const [progress, setProgress] = React.useState
     (new Animated.Value(0))
@@ -223,9 +276,13 @@ const CustomDrawer = () => {
                     setProgress(progress)
                 }, 0)
             return (
-                <CustomDrawerContent navigation={navigation} />
+                <CustomDrawerContent 
+                    navigation={navigation}
+                    selectedTab={selectedTab}
+                    setSelectedTab={setSelectedTab}
+                />
             )}
-            }
+            } 
         >
             <Drawer.Screen name='MianLayout'>
                 {props => <MainLayout {...props} 
@@ -238,5 +295,19 @@ const CustomDrawer = () => {
   )
 }
 
-export default CustomDrawer
 
+function mapStateToProp(state) {
+    return {
+        selectedTab: state.tabReducer.selectedTab
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        setSelectedTab: (selectedTab) => {return dispatch
+        (setSelectedTab(selectedTab)) }
+    }
+}
+
+export default connect(mapStateToProp, mapDispatchToProps)
+(CustomDrawer)
