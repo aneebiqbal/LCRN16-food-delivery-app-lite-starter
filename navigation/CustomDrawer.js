@@ -12,7 +12,7 @@ import {
     dummyData
 } from '../constants'
 import Animated  from 'react-native-reanimated'
-import { connect, Connect } from 'react-redux'
+import { connect } from 'react-redux'
 import { setSelectedTab } from '../stores/tab/tabAction'
 
 const Drawer = createDrawerNavigator();
