@@ -67,6 +67,16 @@ const wrapSandwich = {
     isFavourite: true,
     image: require("../assets/dummyData/wrap_sandwich.png")
 }
+const GrillShuarma = {
+    id: 5,
+    name: "Grill Shuarma",
+    description: "Grilled vegetables Shuarma",
+    categories: [1, 2,3],
+    price: 10.99,
+    calories: 78,
+    isFavourite: true,
+    image: require("../assets/dummyData/wrap_sandwich.png")
+}
 
 const menu = [
     {
@@ -80,7 +90,7 @@ const menu = [
         id: 2,
         name: "Nearby you",
         list: [
-            hamburger, vegBiryani, wrapSandwich,
+            hamburger, vegBiryani, wrapSandwich, GrillShuarma,
         ]
     },
     {

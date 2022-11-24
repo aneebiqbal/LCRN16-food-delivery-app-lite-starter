@@ -15,11 +15,14 @@ import Favourite from "./Favourite/Favourite";
 // Notification
 import Notification from "./Notification/Notification"
 
+import FilterModal from "./Home/FilterModal";
+
 export {
     MainLayout,
     Home,
     Search,
     CartTab,
     Favourite,
-    Notification
+    Notification,
+    FilterModal
 }

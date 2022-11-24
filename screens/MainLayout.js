@@ -32,6 +32,7 @@ import {
     dummyData
 } from '../constants'
 import LinearGradient from 'react-native-linear-gradient';
+
 const TabButton =({label, icon, isFosuced, outerContainerStyle, innerContainerStyle, onPress}) =>{
     return (
         <TouchableWithoutFeedback
@@ -61,21 +62,22 @@ const TabButton =({label, icon, isFosuced, outerContainerStyle, innerContainerSt
                         style={{
                             width:20,
                             height:20,
-                            tintColor:COLORS.gray
+                            tintColor: isFosuced ? COLORS.white : COLORS.gray
                         }}
                     />
 
                     {isFosuced && 
-                    <Text 
-                        numberOfLines={1}
-                        style={{
-                            marginLeft:SIZES.base,
-                            color:COLORS.white,
-                            ...FONTS.h3
-                        }}
-                    >
-                        {label}
-                    </Text>}
+                        <Text 
+                            numberOfLines={2}
+                            style={{
+                                marginLeft:SIZES.base,
+                                color:COLORS.white,
+                                ...FONTS.h3
+                            }}
+                        >
+                            {label}
+                        </Text>
+                    }
                 </Animated.View>
             </Animated.View>
         </TouchableWithoutFeedback>
@@ -88,7 +90,7 @@ const MainLayout = ({
     selectedTab,
     setSelectedTab
 }) => {
-
+    const flatListRef = React.useRef() 
     //reanimated share value
 
     const homeTabFlex = useSharedValue(1)
@@ -136,17 +138,6 @@ const MainLayout = ({
         }
     })
 
-    const notificationFlexStyle = useAnimatedStyle(() => {
-        return {
-            flex: notificationTabFlex.value
-        }
-    })
-    const notificationColorStyle = useAnimatedStyle(() => {
-        return {
-            backgroundColor: notificationTabColor.value
-        }
-    })
-
     const cartFlexStyle = useAnimatedStyle(() => {
         return {
             flex: cartTabFlex.value
@@ -158,12 +149,26 @@ const MainLayout = ({
         }
     })
 
+
+    const notificationFlexStyle = useAnimatedStyle(() => {
+        return {
+            flex: notificationTabFlex.value
+        }
+    })
+    const notificationColorStyle = useAnimatedStyle(() => {
+        return {
+            backgroundColor: notificationTabColor.value
+        }
+    })
+
     React.useEffect(() => {
         setSelectedTab(constants.screens.home)
     }, [])
 
     React.useEffect(() =>{
         if(selectedTab === constants.screens.home) {
+            flatListRef?.current.scrollToIndex({index:0, Animated: false})
+
             homeTabFlex.value = withTiming(4, {duration: 500})
             homeTabColor.value = withTiming(COLORS.primary, {duration: 500})
         } else {
@@ -172,14 +177,8 @@ const MainLayout = ({
         }
 
         if(selectedTab === constants.screens.search) {
-            searchTabFlex.value = withTiming(4, {duration: 500})
-            searchTabColor.value = withTiming(COLORS.primary, {duration: 500})
-        } else {
-            searchTabFlex.value = withTiming(1, {duration: 500})
-            searchTabColor.value = withTiming(COLORS.white, {duration: 500})
-        }
+            flatListRef?.current.scrollToIndex({index:1, Animated: false})
 
-        if(selectedTab === constants.screens.search) {
             searchTabFlex.value = withTiming(4, {duration: 500})
             searchTabColor.value = withTiming(COLORS.primary, {duration: 500})
         } else {
@@ -188,6 +187,8 @@ const MainLayout = ({
         }
 
         if(selectedTab === constants.screens.cart) {
+            flatListRef?.current.scrollToIndex({index:2, Animated: false})
+
             cartTabFlex.value = withTiming(4, {duration: 500})
             cartTabColor.value = withTiming(COLORS.primary, {duration: 500})
         } else {
@@ -196,6 +197,8 @@ const MainLayout = ({
         }
 
         if(selectedTab === constants.screens.favourite) {
+            flatListRef?.current.scrollToIndex({index:3, Animated: false})
+
             favouriteTabFlex.value = withTiming(4, {duration: 500})
             favouriteTabColor.value = withTiming(COLORS.primary, {duration: 500})
         } else {
@@ -204,6 +207,8 @@ const MainLayout = ({
         }
 
         if(selectedTab === constants.screens.notification) {
+            flatListRef?.current.scrollToIndex({index:4, Animated: false})
+
             notificationTabFlex.value = withTiming(4, {duration: 500})
             notificationTabColor.value = withTiming(COLORS.primary, {duration: 500})
         } else {
@@ -267,14 +272,39 @@ const MainLayout = ({
             <View style={{
                 flex:1
             }}>
-                <Text>MainLayout</Text>
+                <FlatList
+                    ref={flatListRef}
+                    horizontal
+                    scrollEnabled={false}
+                    pagingEnabled
+                    showsHorizontalScrollIndicator={false}
+                    snapToAlignment='center'
+                    snapToInterval={SIZES.width}
+                    data={constants.bottom_tabs}
+                    renderItem={({item, index}) =>{
+                        return (
+                            <View style={{
+                                height:SIZES.height,
+                                width:SIZES.width
+                                }}
+                            >
+                            {item.label == constants.screens.home && <Home />}
+                            {item.label == constants.screens.search && <Search />}
+                            {item.label == constants.screens.cart && <CartTab />}
+                            {item.label == constants.screens.favourite && <Favourite />}
+                            {item.label == constants.screens.notification && <Notification />}
+                            </View>
+                        )
+                    }}
+                />
             </View>
 
             {/* Footer */}
             <View style={{
                 height:100,
-                justifyContent:'flex-end'
+                justifyContent:'flex-end',
             }}>
+            
             {/* shadow */}
                 <LinearGradient
                 start={{x:0, y:0 }}
@@ -301,7 +331,7 @@ const MainLayout = ({
                     paddingBottom:10,
                     borderTopLeftRadius:20,
                     borderTopRightRadius:20,
-                    backgroundColor:COLORS.white
+                    backgroundColor:COLORS.white,
                 }}>
                     <TabButton
                         label={constants.screens.home}
