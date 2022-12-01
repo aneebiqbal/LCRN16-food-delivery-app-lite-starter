@@ -228,7 +228,7 @@ const Section =({title, onPress, children}) => {
                 </Section>
             )
         }
-
+        
         function renderFoodCatogeries() {
             return (
                 <FlatList

@@ -17,6 +17,14 @@ import Notification from "./Notification/Notification"
 
 import FilterModal from "./Home/FilterModal";
 
+import OnBoarding from "./OnBoarding/OnBoarding"
+
+// Authentication
+import SignIn from "./Authentication/SignIn"
+import SignUp from "./Authentication/SignUp"
+import Otp from "./Authentication/Otp"
+import ForgotPassword from "./Authentication/ForgotPassword"
+
 export {
     MainLayout,
     Home,
@@ -24,5 +32,12 @@ export {
     CartTab,
     Favourite,
     Notification,
-    FilterModal
+    FilterModal,
+
+    OnBoarding,
+    
+    SignIn,
+    SignUp,
+    Otp,
+    ForgotPassword
 }
