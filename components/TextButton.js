@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import {FONTS, COLORS} from '../constants'
 
-const TextButton = ({label, labelStyle, buttonContainerStyle, onPress}) => {
+const TextButton = ({label, disabled, labelStyle, buttonContainerStyle, onPress}) => {
   return (
     <TouchableOpacity
         style={{
@@ -11,6 +11,7 @@ const TextButton = ({label, labelStyle, buttonContainerStyle, onPress}) => {
             backgroundColor: COLORS.primary,
             ...buttonContainerStyle
         }}
+        disabled={disabled}
         onPress={onPress}
     >
         <Text style={{

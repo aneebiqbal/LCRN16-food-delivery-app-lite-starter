@@ -225,6 +225,7 @@ const CustomDrawerContent = ({navigation, selectedTab, setSelectedTab}) =>{
                         icon={icons.logout}
                         isFocused={selectedTab == 'Log Out'}
                         onPress={() =>{
+                            navigation.navigate('SignIn')
                             setSelectedTab('Help Center')
                             navigation.navigate('MianLayout')
                         }}
